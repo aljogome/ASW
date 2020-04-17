@@ -12,17 +12,24 @@ public class Players implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	static File database = new File("database.txt");
+	static File database;
 	
 	private static Players single_instance = null;
 	
 	static Players getInstance() {
-		if (single_instance == null)
-			single_instance = new Players();
-		
+		if (single_instance == null) {
+			database = new File("database.txt");
+			return single_instance = new Players();
+		}
+		database = restore();
 		return single_instance;
 	}
 	
+	private static File restore() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	void cleanup() throws FileNotFoundException {
 		PrintWriter cln = new PrintWriter("database.txt");
 	}

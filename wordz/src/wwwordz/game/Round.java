@@ -3,10 +3,12 @@
 package wwwordz.game;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
-import wwwordz.shared.Config;
+import wwwordz.shared.Configs;
 import wwwordz.shared.Puzzle;
+import wwwordz.shared.Rank;
 
 public class Round {
 
@@ -19,20 +21,16 @@ public class Round {
 	}
 	
 	Date end;
-	static Date join;
-	Date play;
+	static Date join = new Date(Configs.JOIN_STAGE_DURATION);
+	static Date play = new Date(Configs.PLAY_STAGE_DURATION);
 	Puzzle puzzle;
-	Date ranking;
-	Date report;
+	static Date ranking = new Date(Configs.RANKING_STAGE_DURATION);
+	static Date report = new Date(Configs.REPORT_STAGE_DURATION);
 	Map<String, Player> roundPlayers;
 	
-	Round(){
+	public Round(){
 		this.end = null;
-		this.join = new Date(Config.JOIN_STAGE_DURATION);
-		this.play = new Date(Config.PLAY_STAGE_DURATION);
 		this.puzzle = null;
-		this.ranking = null;
-		this.report = null;
 		this.roundPlayers = null;
 	}
 	
@@ -41,6 +39,46 @@ public class Round {
 	}
 	
 	static long getPlayStageDuration() {
-		return Config.
+		return play.getTime();
+	}
+	
+	Puzzle getPuzzle() {
+		return puzzle;
+	}
+	
+	// List<Rank> getRanking()
+	
+	static long getRankingStageDuration() {
+		return ranking.getTime();
+	}
+	
+	static long getReportStageDuration() {
+		return report.getTime();
+	}
+	
+	static long getRoundDuration() {
+		return getJoinStageDuration() + getPlayStageDuration() + getRankingStageDuration() + getReportStageDuration();
+	}
+	
+	// long getTimeToNextPlay()
+	
+	// long register()
+	
+	static void setJoinStageDuration(long joinStageDuration) {
+		join.setTime(joinStageDuration);
+	}
+	
+	static void setPlayDuration(long playStageDuration) {
+		play.setTime(playStageDuration);
+	}
+	
+	// void setPoints()
+	
+	static void setRankingStageDuration(long rankingStageDuration) {
+		ranking.setTime(rankingStageDuration);
+	}
+	
+	static void setReportStageDuration(long reportStageDuration) {
+		report.setTime(reportStageDuration);
 	}
 }
