@@ -1,69 +1,65 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Random; 
 
-public class Trie { 
-      
-    
-    static final int ALPHABET_SIZE = 26; 
-      
 
-    static class TrieNode 
-    { 
-        TrieNode[] children = new TrieNode[ALPHABET_SIZE]; 
-       
-        
-        boolean isEndOfWord; 
-          
-        TrieNode(){ 
-            isEndOfWord = false; 
-            for (int i = 0; i < ALPHABET_SIZE; i++) 
-                children[i] = null; 
-        } 
-    }; 
-       
-    static TrieNode root; 
+class TrieNode {
+
+boolean isWord;
+
+HashMap<Character, TrieNode> map = new HashMap<Character, TrieNode>();
+
+
+
+public TrieNode() {}
+
+}
+
+
+public class Trie 
+{
+    public class Search{
+
+    public TrieNode t;
+
+    public Search(TrieNode t){}
+
+    public Search(Trie.Search search){
+
+    }
+
+    public boolean isWord(){
+        return t.isWord;
+    }
+
+    public boolean continueWith(char letter){
+        if(t.map.get(letter) != null)
+            return true;
+        return false;
+    }
+
+}
+
+    static private TrieNode root;
     static Random r = new Random(); 
-      
- 
-    public static void put(java.lang.String word)
-    { 
-        int level; 
-        int length = word.length(); 
-        int index; 
-       
-        TrieNode s = root; 
-       
-        for (level = 0; level < length; level++) 
-        { 
-            index = word.charAt(level) - 'a'; 
-            if (s.children[index] == null) 
-                s.children[index] = new TrieNode(); 
-       
-            s = s.children[index]; 
-        } 
-       
-         
-        s.isEndOfWord = true; 
-    } 
 
-    static boolean isWord(TrieNode t) 
-    { 
-    return t.isEndOfWord;
-    }
+    public Trie() {
 
-    static boolean isLeaf(TrieNode t){
+    root = new TrieNode();
 
-     for (int i=0; i < ALPHABET_SIZE; i++) 
-        { 
-            if (t.children[i]!=null)
-                return false; 
-       
-            
-        } 
+}
 
+public static boolean isLeaf(TrieNode t)
+{
+    if (t.map.isEmpty())
         return true;
-    }
-       
-    public static String getRandomLargeWord()
+    return false;
+
+}
+
+public static String getRandomLargeWord()
     {               
     String s = "";
                      
@@ -71,7 +67,7 @@ public class Trie {
     }
 
 
-    private static String getRandomLargeWord(TrieNode t, String s) 
+private static String getRandomLargeWord(TrieNode t, String s) 
     {
         int low = 0;
         int high = 26;
@@ -86,85 +82,49 @@ public class Trie {
 
         else {
 
-        while ( t.children[result] == null)
+        while ( t.map.containsKey( (char)(result + 'a') )==false)
             result = r.nextInt(high-low) + low;
         }
 
-        return temp += (char)(result + 'a') + getRandomLargeWord(t.children[result], s);
+        return temp += (char)(result + 'a') + getRandomLargeWord(t.map.get((char)(result + 'a')) , s);
     } 
 
+public static void insert(String word) 
+{
 
-    static boolean search(String word) 
-    { 
-        int level; 
-        int length = word.length(); 
-        int index; 
-        TrieNode s = root; 
-       
-        for (level = 0; level < length; level++) 
-        { 
-            index = word.charAt(level) - 'a'; 
-       
-            if (s.children[index] == null) 
-                return false; 
-       
-            s = s.children[index]; 
-        } 
-       
-        return (s != null && s.isEndOfWord); 
-    } 
+    insert(word, root, 0);
 
-    public static void iterator(){
-        int i = 0;
-        char[] s= new char[1000];
+}
 
-        iterator(root, s, i);
+private static TrieNode insert(String word, TrieNode x, int pos) 
+{
+
+    if(x == null) x = new TrieNode();
+
+    if(pos == word.length()) {
+
+    x.isWord=true;
+
+    return x;
+
     }
 
+    char c = word.charAt(pos);
 
-    private static void iterator(TrieNode t, char[] s, int level) 
-{ 
-    
+    x.map.put(c, insert(word, x.map.get(c), pos+1));
 
-    if (isWord(t))  
-    { 
-        s[level] = '\0'; 
-        System.out.println(s);
-    } 
-  
-    int i; 
-    for (i = 0; i < ALPHABET_SIZE; i++)  
-    { 
-       
-        if (t.children[i]!=null)  
-        { 
-            s[level] = (char)(i + 'a'); 
-            iterator(t.children[i], s, level + 1); 
-        } 
-    } 
+    return x;
+
+}
+
+
+
+public Trie.Search startSearch(){
+    Search s = new Search(root);
+    return s;
+}
+
+
+
 } 
-       
-    
-    public static void main(String args[]) 
-    { 
-         
-       
-       
-       
-        root = new TrieNode(); 
-        
-       
-        //aqui o keys vai ser o array com as palavras
-         
-        int i; 
-        Object keys;
-		for (i = 0; i < keys.length ; i++) 
-            put(keys[i]); 
-       
-    
-        
-    } 
-
-
-
 
