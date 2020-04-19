@@ -20,23 +20,25 @@ public TrieNode() {}
 
 public class Trie 
 {
-    public class Search{
+    public static class Search{
 
-    public TrieNode t;
+    TrieNode t;
 
-    public Search(TrieNode t){}
-
-    public Search(Trie.Search search){
-
+    public Search(TrieNode t){
+    this.t=t;
     }
 
-    public boolean isWord(){
+
+    public  boolean isWord(){
+
         return t.isWord;
     }
 
-    public boolean continueWith(char letter){
-        if(t.map.get(letter) != null)
+    public  boolean continueWith(char letter){
+        if(t.map.get(letter) != null){
+            t=t.map.get(letter);
             return true;
+        }
         return false;
     }
 
@@ -119,12 +121,37 @@ private static TrieNode insert(String word, TrieNode x, int pos)
 
 
 
-public Trie.Search startSearch(){
+public static Trie.Search startSearch(){
     Search s = new Search(root);
     return s;
 }
 
-
-
+ public static void main(String args[]) 
+    { 
+        
+        String keys[] = {"the", "a", "there", "answer", "any", 
+                         "by", "bye", "their"}; 
+       
+       
+       
+        root = new TrieNode(); 
+       
+         
+        int i; 
+        for (i = 0; i < keys.length ; i++) 
+            insert(keys[i]); 
+       
+        Search s = startSearch();
+        System.out.println(s.continueWith('a'));
+        System.out.println(s.continueWith('n'));
+        System.out.println(s.continueWith('s'));
+        System.out.println(s.continueWith('w'));
+        System.out.println(s.continueWith('y'));
+        
+         
+         
+    } 
 } 
+
+
 
