@@ -17,14 +17,4 @@ public class Manager {
 			single_instance = new Manager();
 		return single_instance;
 	}
-	
-	public static void main(String args[]) {
-		
-		Dictionary dict = Dictionary.getInstance();
-		String word = dict.getRandomLargeWord();
-		
-		//System.out.println(word);
-		System.out.println(word);
-	}
-	
 }

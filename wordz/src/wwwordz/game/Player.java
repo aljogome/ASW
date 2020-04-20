@@ -2,6 +2,8 @@ package wwwordz.game;
 
 import java.io.Serializable;
 
+import wwwordz.shared.Table;
+
 public class Player implements Serializable{
 
 	/**
@@ -20,6 +22,19 @@ public class Player implements Serializable{
 		this.points = 0;
 		this.accumulated = 0;
 	}
+	
+	 @Override
+	 public String toString() { 
+		 return nick+"\t"+password+"\t"+points+"\t"+accumulated; 
+	 }
+
+	 @Override
+	 public boolean equals(Object obj) {
+		Player other = (Player) obj;
+		if(nick.equals(other.nick) && password.equals(other.password) && points == other.points && accumulated == other.accumulated)
+			return true;
+		return false;
+	 }
 	
 	int getAccumulated() {
 		return accumulated;

@@ -3,6 +3,7 @@
 package wwwordz.game;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,14 @@ public class Round {
 		return puzzle;
 	}
 	
-	// List<Rank> getRanking()
+	public List<Rank> getRanking(){
+		List<Rank> ranks = new LinkedList<Rank>();
+		for(Map.Entry<String, Player> entry : roundPlayers.entrySet()) {
+			Player player = entry.getValue();
+			ranks.add(new Rank(player.getNick(), player.getPoints(), player.getAccumulated()));
+		}
+		return ranks;
+	}
 	
 	static long getRankingStageDuration() {
 		return ranking.getTime();
@@ -62,19 +70,24 @@ public class Round {
 	
 	// long getTimeToNextPlay()
 	
-	// long register()
+	long register(String nick, String password) {
+		roundPlayers.put(nick, new Player(nick, password));
+		return getJoinStageDuration(); // what to return?
+	}
 	
 	static void setJoinStageDuration(long joinStageDuration) {
 		join.setTime(joinStageDuration);
 	}
 	
-	static void setPlayDuration(long playStageDuration) {
+	static void setPlayStageDuration(long playStageDuration) {
 		play.setTime(playStageDuration);
 	}
 	
-	// void setPoints()
+	void setPoints(String nick, int points){
+		roundPlayers.get(nick).setPoints(points);
+	}
 	
-	static void setRankingStageDuration(long rankingStageDuration) {
+	static void setRankingStageSuration(long rankingStageDuration) {
 		ranking.setTime(rankingStageDuration);
 	}
 	

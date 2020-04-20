@@ -3,7 +3,10 @@
 package wwwordz.game;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
+
+import wwwordz.shared.WWWordzException;
 
 public class Players implements Serializable{
 
@@ -11,27 +14,62 @@ public class Players implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	static File database;
 	
+	private HashMap<String, Player> playersMap;
 	private static Players single_instance = null;
+	static File database = new File("database.txt");
+	
+	private Players() {
+		playersMap = new HashMap<>();
+	}
 	
 	static Players getInstance() {
 		if (single_instance == null) {
-			database = new File("database.txt");
 			return single_instance = new Players();
 		}
-		database = restore();
-		return single_instance;
+		return restore();
 	}
 	
-	private static File restore() {
-		// TODO Auto-generated method stub
-		return null;
+	private void writeObject(ObjectOutputStream serializer) throws IOException {
+	    serializer.defaultWriteObject();
 	}
+	  
+	private void readObject(ObjectInputStream deserializer) throws IOException, ClassNotFoundException  {
+	    deserializer.defaultReadObject();
+	}
+	
+	private static Players restore() {
+	     Players players = null;
+	     if (getHome().canRead()) {
+	    	 try(
+	    		FileInputStream stream = new FileInputStream("database.ser");
+	    		ObjectInputStream deserializer = new ObjectInputStream(stream);
+	     ) 	{ 
+	       players = (Players) deserializer.readObject();
+	       } catch(IOException | ClassNotFoundException cause) {
+	        cause.printStackTrace();
+	      }
+	    } else {
+	       players = new Players();
+	    }
+	     return players;
+	  } 
+	
+	private static void backup(Players players) {
+	    try(
+	        FileOutputStream stream = new FileOutputStream("database.ser");
+	        ObjectOutputStream serializer = new ObjectOutputStream(stream);
+	      ) { 
+	        serializer.writeObject(players);
+	    } catch(IOException cause) {
+	      cause.printStackTrace();
+	    }
+	  }
 
-	void cleanup() throws FileNotFoundException {
-		PrintWriter cln = new PrintWriter("database.txt");
+	// ?
+	void cleanup() throws WWWordzException, FileNotFoundException {
+		PrintWriter pw = new PrintWriter("filepath.txt");
+		pw.close();
 	}
 	
 	static File getHome() {
@@ -42,34 +80,32 @@ public class Players implements Serializable{
 		database = home;
 	}
 	
-	Player getPlayer(String nick) throws FileNotFoundException {
-		Scanner infile = new Scanner(getHome());
-		String nickname = "";
-		String password;
-		String l;
-		while((l=infile.nextLine()) != null) {
-			if(l.equals(nick)) {
-				nickname = nick;
-				break;
-			}
-		}
-		password = infile.nextLine();
-		return new Player(nickname, password);
+	Player getPlayer(String nick) throws WWWordzException {
+		return playersMap.get(nick);
 	}
 	
-	void addPoints(String nick, int points) throws FileNotFoundException {
+	void addPoints(String nick, int points) throws WWWordzException {
 		getPlayer(nick).points = getPlayer(nick).points + points;
 	}
 	
-	void resetPoints(String nick) throws FileNotFoundException {
+	void resetPoints(String nick) throws WWWordzException {
 		getPlayer(nick).points = 0;
 	}
 	
-	boolean verify(String nick, String password) throws FileNotFoundException {
-		Player verif = getPlayer(nick);
-		if(verif.nick.equals(nick) && verif.password.equals(password))
-			return true;
+	boolean verify(String nick, String password) throws IOException, ClassNotFoundException {
+		FileInputStream fis = new FileInputStream("database.ser"); 
+        ObjectInputStream ois = new ObjectInputStream(fis); 
+        
+        Player p = (Player)ois.readObject(); 
+        ois.close();
+        if(password.equals(p.password))
+        	return true;
 		return false;
+	}
+	
+	public static void main(String args[]) {
+		System.out.println("ola");
+		Players players = new Players();
 	}
 }
 
