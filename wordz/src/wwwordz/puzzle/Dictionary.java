@@ -1,6 +1,3 @@
-// métodos a fazer: getInstance(), startSearch(), getRandomLargeWord();
-// feitos: getInstance(), getRandomLargeWord()
-
 package wwwordz.puzzle;
 
 import java.io.*;
@@ -48,13 +45,19 @@ public class Dictionary {
 		}
 		
 		/*public Trie.Search startSearch(){
-			
+			return new Trie.Search();
 		}*/
+		
+		public boolean isAlpha(String name) {
+		    return name.matches("[A-Z]+");
+		}
 		
 		public String getRandomLargeWord() {
 			int min = 0;
 			int max = (int) Math.floor(43879);
 			int i = (int) (Math.floor(Math.random() * (max - min + 1)) + min);
+			while(isAlpha(words[i])==false || words[i].length()<3==true)
+				i = (int) (Math.floor(Math.random() * (max - min + 1)) + min);
 			return words[i];
 		}
 }

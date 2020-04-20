@@ -1,3 +1,5 @@
+package wwwordz.puzzle;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
@@ -74,31 +76,32 @@ private static String getRandomLargeWord(TrieNode t, String s)
         int low = 0;
         int high = 26;
         int result = r.nextInt(high-low) + low;
-        String temp = "";
-  
 
-        if (isLeaf(t))
-        { 
-        return temp +='\0';  
-        } 
-
-        else {
-
-        while ( t.map.containsKey( (char)(result + 'a') )==false)
-            result = r.nextInt(high-low) + low;
+        if (isLeaf(t) && s.length()>=3) {
+        	return s;
         }
 
-        return temp += (char)(result + 'a') + getRandomLargeWord(t.map.get((char)(result + 'a')) , s);
+        else if(isLeaf(t)){
+        	System.out.println("ola");
+        	s = "";
+        	t = root;
+        }
+        
+        while ( t.map.containsKey( (char)(result + 'a') )==false)
+            result = r.nextInt(high-low) + low;
+        
+        s += (char)(result + 'a');
+        return getRandomLargeWord(t.map.get((char)(result + 'a')) , s);
     } 
 
-public static void insert(String word) 
+public void put(String word) 
 {
 
-    insert(word, root, 0);
+    put(word, root, 0);
 
 }
 
-private static TrieNode insert(String word, TrieNode x, int pos) 
+private TrieNode put(String word, TrieNode x, int pos) 
 {
 
     if(x == null) x = new TrieNode();
@@ -113,7 +116,7 @@ private static TrieNode insert(String word, TrieNode x, int pos)
 
     char c = word.charAt(pos);
 
-    x.map.put(c, insert(word, x.map.get(c), pos+1));
+    x.map.put(c, put(word, x.map.get(c), pos+1));
 
     return x;
 
@@ -125,33 +128,4 @@ public static Trie.Search startSearch(){
     Search s = new Search(root);
     return s;
 }
-
- public static void main(String args[]) 
-    { 
-        
-        String keys[] = {"the", "a", "there", "answer", "any", 
-                         "by", "bye", "their"}; 
-       
-       
-       
-        root = new TrieNode(); 
-       
-         
-        int i; 
-        for (i = 0; i < keys.length ; i++) 
-            insert(keys[i]); 
-       
-        Search s = startSearch();
-        System.out.println(s.continueWith('a'));
-        System.out.println(s.continueWith('n'));
-        System.out.println(s.continueWith('s'));
-        System.out.println(s.continueWith('w'));
-        System.out.println(s.continueWith('y'));
-        
-         
-         
-    } 
 } 
-
-
-
