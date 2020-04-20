@@ -14,24 +14,28 @@ public class Puzzle implements Serializable{
 	List<Puzzle.Solution> solutions = new LinkedList<Puzzle.Solution>();
 	Table table = new Table();
 	
-	Puzzle(){
+	public Puzzle(){
 		this.solutions = null;
 		this.table = null;
 	}
 	
-	List<Puzzle.Solution> getSolution(){
+	public List<Puzzle.Solution> getSolutions(){
 		return solutions;
+	}
+	
+	public Table getTable() {
+		return table;
 	}
 	
 	void setSolutions(List<Puzzle.Solution> solutions) {
 		this.solutions = solutions;
 	}
 	
-	void setTable(Table table) {
+	public void setTable(Table table) {
 		this.table = table;
 	}
 	
-	static class Solution implements Serializable{
+	public static class Solution implements Serializable{
 
 		/**
 		 * 
@@ -41,12 +45,12 @@ public class Puzzle implements Serializable{
 		List<Table.Cell> cells = new LinkedList<Table.Cell>();
 		String word;
 		
-		Solution(){
+		public Solution(){
 			this.cells = null;
 			this.word = null;
 		}
 		
-		Solution(String word, List<Table.Cell> cells){
+		public Solution(String word, List<Table.Cell> cells){
 			this.word = word;
 			this.cells = cells;
 		}

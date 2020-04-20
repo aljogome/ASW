@@ -13,10 +13,11 @@ public class Rank implements Serializable {
 	String nick;
 	int points;
 	
-	Rank(){
+	public Rank(){
+		nick = null;
 	}
 	
-	Rank(String nickname, int pts, int accum){
+	public Rank(String nickname, int pts, int accum){
 		this.accumulated = accum;
 		this.points = pts;
 		this.nick = nickname;
